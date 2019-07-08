@@ -7,9 +7,32 @@ const initialState = {
 };
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case ACTIONS.USER_LOGIN_FAILED:
+    case ACTIONS.START_LOADING:
 			return (state = Object.assign({
-				status: 'FAILED',
+				status: 'START_LOADING'
+      }));
+
+    case ACTIONS.STOP_LOADING:
+      return (state = Object.assign({
+        status: 'STOP_LOADING'
+      }));
+
+      case ACTIONS.RESET_STATUS:
+        return (state = Object.assign({
+          token: '',
+          status: '',
+          error: ''
+        }));
+
+		case ACTIONS.USER_LOGIN_UNAUTHORIZED:
+			return (state = Object.assign({
+				status: 'UNAUTHORIZED',
+				error: action.payload
+      }));
+      
+      case ACTIONS.USER_LOGIN_NOTFOUND:
+			return (state = Object.assign({
+				status: 'NOTFOUND',
 				error: action.payload
 			}));
 

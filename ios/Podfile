@@ -28,6 +28,14 @@ target 'AdvertiseIt_Native' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+
+
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'AdvertiseIt_NativeTests' do
     inherit! :search_paths
     # Pods for testing
