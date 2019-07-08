@@ -1,0 +1,30 @@
+
+
+rgb(50, 53, 57)
+#323539
+
+rgb(77, 79, 80)
+#4d4f50
+
+
+
+Active Story Gradient:
+from rgb(45, 114, 255) to rgb(255, 124, 0)
+
+
+Pink Text: #f74f78
+Alt Text: #d3d4d4
+Blue: #2d72ff
+Search Bar Color: #4d4f50
+
+
+
+.Button_Style {
+  background-image: -moz-linear-gradient( 9deg, rgb(136,78,162) 0%, rgb(222,78,100) 100%);
+
+}
+
+.DescriptionText {
+	color: #6e6e6e;
+	
+}
