@@ -1,7 +1,9 @@
-// import SignupReducer from './SignupReducer';
+import SignupReducer from './SignupReducer';
 import LoginReducer from './LoginReducer';
+import FacebookReducer from './FacebookReducer';
 
 export { 
-  // SignupReducer,
-  LoginReducer
+  SignupReducer,
+  LoginReducer,
+  FacebookReducer
 }

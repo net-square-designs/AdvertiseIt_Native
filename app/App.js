@@ -1,14 +1,54 @@
 import React, {Fragment} from 'react';
-import Login from './containers/login';
-// import App2 from './routes/index';
+import { Provider } from 'react-redux';
+import { BackHandler } from 'react-native';
+import { Scene, Router, Actions, Stack } from 'react-native-router-flux';
+import store from './store';
+import { ACTIONS } from './actions/actionTypes';
+import Login from '../app/screens/login';
+import Signup from '../app/screens/signup';
+import Home from '../app/screens/home';
 
-const App = () => {
+const LogUserIn = () => {
   return (
-    <Fragment>
+    <Provider store={store}>
       <Login />
-      {/* <App2 /> */}
-    </Fragment>
+    </Provider>
   );
 };
+
+const SignUserUp = () => {
+  return (
+    <Provider store={store}>
+      <Signup />
+    </Provider>
+  );
+};
+
+const HomeFeed = () => {
+  return (
+    <Provider store={store}>
+      <Home />
+   </Provider>
+  );
+};
+
+const App = () => (
+  <Router backAndroidHandler={() => {
+    if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'SignUserUp') {
+      store.dispatch([{
+        type: ACTIONS.RESET_STATUS
+      }, {
+        type: ACTIONS.FACEBOOK_RESET_STATUS
+      }]);
+      return BackHandler.exitApp();
+    }
+  }}>
+    <Stack key="root" hideNavBar>
+      <Scene key="LogUserIn" component={LogUserIn}  />
+      <Scene key="SignUserUp" component={SignUserUp} />
+      <Scene key="HomeFeed" component={HomeFeed} />
+    </Stack>
+  </Router>
+);
 
 export default App;

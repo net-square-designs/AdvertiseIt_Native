@@ -1,17 +1,20 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { reduxBatch }  from '@manaflair/redux-batch';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import {
-    SignupReducer,
-    LoginReducer,
+  LoginReducer,
+  SignupReducer,
+  FacebookReducer
 } from './reducers/index';
 
 
 const rootReducer = combineReducers({
-    signUp: SignupReducer,
-    logIn: LoginReducer,
+  logIn: LoginReducer,
+  signUp: SignupReducer,
+  facebook: FacebookReducer
 });
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), reduxBatch));
 
 export default store;

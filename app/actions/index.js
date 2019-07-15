@@ -1,7 +1,11 @@
-// import SignupAUser from './Signup';
+import SignupAUser from './Signup';
 import LoginAUser from './Login';
+import SocialAuth from './Facebook';
+import ResetStatus from './ResetStatus';
 
 export {
-  // SignupAUser,
-  LoginAUser
+  SignupAUser,
+  LoginAUser,
+  SocialAuth,
+  ResetStatus
 };
