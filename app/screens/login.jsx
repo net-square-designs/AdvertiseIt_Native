@@ -157,25 +157,6 @@ class Login extends React.Component {
                 />
                 <Text style={{color: '#ffffff'}}>{emailError}</Text>
 
-                {/* <View style={styles.passwordInput}>
-                    <TextInput
-                      style={{ fontSize: 18, color: 'white', width: wp('55%'), 
-                      fontFamily: 'Arial' }}
-                      onChangeText={text => this.handlePassword(text)}
-                      value={this.state.password}
-                      placeholder='Password'
-                      placeholderTextColor='#ffffff'
-                      secureTextEntry={passwordVisibility}
-                      onChange={() => {
-                        this.setState({
-                          passwordError: ''
-                        });
-                      }}
-                      />
-                    <TouchableHighlight onPress={this.handlePasswordVisibility} underlayColor='#323539'>
-                      <Image style={styles.passwordImage} source={eye} />
-                    </TouchableHighlight>
-                </View> */}
                 <TextInput
                     style={{ fontSize: 18, color: 'white', width: wp('75%'), height: hp('8%'),
                     fontFamily: 'Arial', backgroundColor: '#323539', paddingLeft: wp('5%'), borderTopLeftRadius : 9, borderBottomLeftRadius : 9 }}

@@ -19,6 +19,7 @@
     "react": "16.8.6",
     "react-native": "0.60.0",
     "react-native-config": "^0.11.7",
+    "react-native-drawer-layout-polyfill": "^2.0.0",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-responsive-screen": "^1.2.2",
     "react-native-router-flux": "^4.0.6",
