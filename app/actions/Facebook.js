@@ -2,15 +2,26 @@ import Axios from 'axios';
 import Config from "react-native-config";
 import { ACTIONS } from './actionTypes';
 
-const SocialAuth = (email, username) => async (dispatch) => {
+let response;
+
+const SocialAuth = (email, username, roleChangedTo) => async (dispatch) => {
  try {
     dispatch({
       type: ACTIONS.FACEBOOK_START_LOADING
     });
-    const response = await Axios.post(`${Config.BASE_URL_PROD}/api/v1/auth/social`, {
-      email,
-      username
-    });
+
+    if (roleChangedTo === 'influencer') {
+      response = await Axios.post(`${Config.BASE_URL_PROD}/api/v1/auth/social`, {
+        email,
+        username,
+        roleChangedTo
+      });
+    } else {
+      response = await Axios.post(`${Config.BASE_URL_PROD}/api/v1/auth/social`, {
+        email,
+        username
+      });
+    }
 
     if (response.status === 201 || response.status === 200) {
       dispatch({
@@ -22,6 +33,7 @@ const SocialAuth = (email, username) => async (dispatch) => {
       });
     }
   } catch(error) {
+    console.log(error)
       dispatch({
         type: ACTIONS.FACEBOOK_STOP_LOADING
       });

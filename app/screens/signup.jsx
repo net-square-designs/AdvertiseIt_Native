@@ -360,10 +360,6 @@ const styles = StyleSheet.create({
   passwordImage: {
     height: hp('3%'),
     width: hp('6%'),
-    // marginTop: hp('-8%'),
-    // // marginLeft: wp('60%'),
-    // zIndex: 2,
-    // backgroundColor: '#323539'
   },
   linearGradient: {
     paddingLeft: wp('8%'),

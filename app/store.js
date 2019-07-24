@@ -5,14 +5,16 @@ import thunk from 'redux-thunk';
 import {
   LoginReducer,
   SignupReducer,
-  FacebookReducer
+  FacebookReducer,
+  SwitchRoleToCustomerMerchantReducer
 } from './reducers/index';
 
 
 const rootReducer = combineReducers({
   logIn: LoginReducer,
   signUp: SignupReducer,
-  facebook: FacebookReducer
+  facebook: FacebookReducer,
+  switchRoleCustomerMerchant: SwitchRoleToCustomerMerchantReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), reduxBatch));

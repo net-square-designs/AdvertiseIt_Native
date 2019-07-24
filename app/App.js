@@ -33,22 +33,23 @@ const HomeFeed = () => {
 };
 
 const App = () => (
-  <Router backAndroidHandler={() => {
-    if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'SignUserUp') {
-      store.dispatch([{
-        type: ACTIONS.RESET_STATUS
-      }, {
-        type: ACTIONS.FACEBOOK_RESET_STATUS
-      }]);
-      return BackHandler.exitApp();
-    }
-  }}>
-    <Stack key="root" hideNavBar>
-      <Scene key="LogUserIn" component={LogUserIn}  />
-      <Scene key="SignUserUp" component={SignUserUp} />
-      <Scene key="HomeFeed" component={HomeFeed} />
-    </Stack>
-  </Router>
+    <Router backAndroidHandler={() => {
+      if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'SignUserUp') {
+        store.dispatch([{
+          type: ACTIONS.RESET_STATUS
+        }, {
+          type: ACTIONS.FACEBOOK_RESET_STATUS
+        }]);
+        return BackHandler.exitApp();
+      }
+    }}>
+      <Stack key="root" hideNavBar>
+        {/* <Scene key="HomeFeed" component={HomeFeed} /> */}
+        <Scene key="LogUserIn" component={LogUserIn}  />
+        <Scene key="SignUserUp" component={SignUserUp} />
+        <Scene key="HomeFeed" component={HomeFeed} />
+      </Stack>
+    </Router>
 );
 
 export default App;
