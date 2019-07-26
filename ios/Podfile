@@ -36,6 +36,8 @@ target 'AdvertiseIt_Native' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'AdvertiseIt_NativeTests' do
     inherit! :search_paths
     # Pods for testing

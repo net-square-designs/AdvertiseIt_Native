@@ -30,12 +30,16 @@ import facebookLogo from '../assets/facebook.png';
 //Actions
 import { LoginAUser, SocialAuth, ResetStatus } from '../actions/index';
 
+// Components
+import { Loading } from '../components';
+
 class Login extends React.Component {
   state = {
     email: '',
     password: '',
     emailError: '',
     passwordError: '',
+    showLoading: false,
     passwordVisibility: true
   }
 
@@ -78,7 +82,12 @@ class Login extends React.Component {
     // Check if user already exists, if not sign him up, else log him in
     const { SocialAuth } = this.props;
     SocialAuth(this.state.user.emails[0].value, this.state.user.emails[0].value);
-    Actions.HomeFeed();
+    this.setState({
+      showLoading: true
+    });
+    setTimeout(() => {
+      Actions.HomeFeed();
+    }, 7000);
   };
 
 
@@ -134,8 +143,12 @@ class Login extends React.Component {
 
   render() {
     const { status, router } = this.props;
-    const { emailError, passwordError, passwordVisibility } = this.state;
-  
+    const { emailError, passwordError, passwordVisibility, showLoading } = this.state;
+
+    if (showLoading) {
+      return <Loading />
+    }
+
       return (
           <React.Fragment>
             <ScrollView showsVerticalScrollIndicator={false}>

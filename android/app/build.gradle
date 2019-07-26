@@ -117,6 +117,8 @@ android {
         applicationId "com.advertiseit_native"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -164,6 +166,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-image-crop-picker')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-config')
     implementation project(':react-native-linear-gradient')
