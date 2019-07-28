@@ -6,7 +6,10 @@ import {
   LoginReducer,
   SignupReducer,
   FacebookReducer,
-  SwitchRoleToCustomerMerchantReducer
+  SwitchRoleToCustomerMerchantReducer,
+  CloudinaryImageUploadReducer,
+  EditUserProfileReducer,
+  UserProfileReducer
 } from './reducers/index';
 
 
@@ -14,7 +17,10 @@ const rootReducer = combineReducers({
   logIn: LoginReducer,
   signUp: SignupReducer,
   facebook: FacebookReducer,
-  switchRoleCustomerMerchant: SwitchRoleToCustomerMerchantReducer
+  switchRoleCustomerMerchant: SwitchRoleToCustomerMerchantReducer,
+  cloudinary: CloudinaryImageUploadReducer,
+  editedUserProfile: EditUserProfileReducer,
+  userProfile: UserProfileReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), reduxBatch));

@@ -7,6 +7,7 @@ import { ACTIONS } from './actions/actionTypes';
 import Login from '../app/screens/login';
 import Signup from '../app/screens/signup';
 import Home from '../app/screens/home';
+import EditProfile from '../app/screens/editProfile';
 
 const LogUserIn = () => {
   return (
@@ -32,9 +33,17 @@ const HomeFeed = () => {
   );
 };
 
+const UserProfile = () => {
+  return (
+    <Provider store={store}>
+      <EditProfile />
+   </Provider>
+  );
+};
+
 const App = () => (
     <Router backAndroidHandler={() => {
-      if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'SignUserUp') {
+      if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'LogUserIn') {
         store.dispatch([{
           type: ACTIONS.RESET_STATUS
         }, {
@@ -47,6 +56,7 @@ const App = () => (
         {/* <Scene key="HomeFeed" component={HomeFeed} /> */}
         <Scene key="LogUserIn" component={LogUserIn}  />
         <Scene key="SignUserUp" component={SignUserUp} />
+        <Scene key="UserProfile" component={UserProfile} />
         <Scene key="HomeFeed" component={HomeFeed} />
       </Stack>
     </Router>
