@@ -8,6 +8,7 @@ import Login from '../app/screens/login';
 import Signup from '../app/screens/signup';
 import Home from '../app/screens/home';
 import EditProfile from '../app/screens/editProfile';
+import UserHomePage from '../app/screens/userHomePage';
 
 const LogUserIn = () => {
   return (
@@ -41,6 +42,14 @@ const UserProfile = () => {
   );
 };
 
+const UserHomeView = () => {
+  return (
+    <Provider store={store}>
+      <UserHomePage />
+   </Provider>
+  );
+};
+
 const App = () => (
     <Router backAndroidHandler={() => {
       if (Actions.currentScene === 'HomeFeed' || Actions.currentScene === 'LogUserIn') {
@@ -53,11 +62,12 @@ const App = () => (
       }
     }}>
       <Stack key="root" hideNavBar>
-        {/* <Scene key="HomeFeed" component={HomeFeed} /> */}
+        <Scene key="HomeFeed" component={HomeFeed} />
         <Scene key="LogUserIn" component={LogUserIn}  />
         <Scene key="SignUserUp" component={SignUserUp} />
         <Scene key="UserProfile" component={UserProfile} />
-        <Scene key="HomeFeed" component={HomeFeed} />
+        <Scene key="UserHomePage" component={UserHomeView} />
+        {/* <Scene key="HomeFeed" component={HomeFeed} /> */}
       </Stack>
     </Router>
 );

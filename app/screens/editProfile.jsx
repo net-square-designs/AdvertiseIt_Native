@@ -51,7 +51,7 @@ class EditProfile extends React.Component {
     bankAccountNameError: '',
     accountNumberError: '',
     bankNameError: '',
-    imageUploadSource: 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024',
+    imageUploadSource: 'https://res.cloudinary.com/pato/image/upload/v1564756182/default_person_photo.png',
     showLoading: false,
   }
 
