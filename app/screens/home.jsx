@@ -9,7 +9,9 @@ import {
   TouchableHighlight,
   StyleSheet,
   Linking,
-  Image
+  Image,
+  ScrollView,
+  BackHandler
 } from 'react-native';
 import Config from "react-native-config";
 import { connect } from 'react-redux';
@@ -20,24 +22,30 @@ import DrawerLayout from 'react-native-drawer-layout-polyfill';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
 
+// Store
+import store from '../store';
+
 // Actions
 import { SocialAuth, SwitchRoleToCustomerMerchant, UserProfile } from '../actions/index';
+
+// Components
+import { HomeFeedCard, Footer } from '../components';
 
 // Images
 import logo from '../assets/logo_small.png';
 import logoFull from '../assets/logo.png';
 import cartLogo from '../assets/cart.png';
-import homeLogo from '../assets/home_active.png';
 import homepageLogo from '../assets/homepage.png';
 import promotionLogo from '../assets/promotion.jpeg';
 import settingLogo from '../assets/setting.jpeg';
 import notificationLogo from '../assets/notification.jpeg';
 import messageLogo from '../assets/messages.jpeg';
 import bookmarkLogo from '../assets/bookmark.jpeg';
-import searchLogo from '../assets/explore_inactive.png';
-import productLogo from '../assets/add_product.png';
-import activitiesLogo from '../assets/activities_inactive.png';
-import profileLogo from '../assets/profile_inactive.png';
+import logoutLogo from '../assets/logout.jpeg';
+import nikeLogo from '../assets/nike2.png';
+import nikeLogo2 from '../assets/nike.jpg';
+import personLogo from '../assets/person.jpg';
+import defaultPersonPhoto from '../assets/default_person_photo.png';
 
 class Home extends React.Component {
   state = {
@@ -54,8 +62,8 @@ class Home extends React.Component {
     let username;
 
     const { facebookToken, signupToken, loginToken, UserProfile } = this.props;
-        
-    if (facebookToken){
+
+    if (facebookToken) {
       username = jwtDecode(facebookToken).username;
     } else if (signupToken) {
       username = jwtDecode(signupToken).username
@@ -147,6 +155,23 @@ class Home extends React.Component {
     this.refs['DRAWER_REF'].openDrawer();
   }
 
+  logOut = () => {
+    store.dispatch([{
+      type: ACTIONS.RESET_STATUS
+    }, {
+      type: ACTIONS.FACEBOOK_RESET_STATUS
+    }]);
+    return BackHandler.exitApp();
+  }
+
+  addToCart = (productId) => {
+    console.log('Added to cart');
+  }
+
+  viewProductDetails = (productId) => {
+    console.log('Viewing product details');
+  }
+
   render() {
     const { facebookStatus, signUpStatus, loginStatus,
       facebookToken, signupToken, loginToken, userProfile
@@ -157,50 +182,55 @@ class Home extends React.Component {
         {/* Header */}
         <View
           style={{
-            flex: 0.9, flexDirection: 'row', marginLeft: wp('2%'), marginTop: hp('2%'),
-             backgroundColor: 'white'
+            flex: 0.7, flexDirection: 'row', marginLeft: wp('2%'), marginTop: hp('2%'),
+            backgroundColor: 'white'
           }}
         >
-          <Image source={{ uri: (userProfile && userProfile.user) ? (userProfile.user.hasOwnProperty('firstName') ? userProfile.user.image : 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024') : 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024' }}
-            style={{ width: 60, height: 60, borderRadius: 100 }} />
-          <View style={{ marginTop: hp('1%'), marginLeft: wp('2%')}}>
-            <Text style={{fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>{
-              (userProfile && userProfile.user) ? userProfile.user.hasOwnProperty('firstName') ? `${userProfile.user.firstName} ${userProfile.user.lastName}`:
-              (facebookToken) ? jwtDecode(facebookToken).username :
-                (signupToken) ? jwtDecode(signupToken).username :
-                  (loginToken) ? jwtDecode(loginToken).username :
-                    'Please Login' : ''
+          {/* Header */}
+          {/* <Image source={{ uri: (userProfile && userProfile.user) ? (userProfile.user.hasOwnProperty('firstName') ? userProfile.user.image : 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024') : 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024' }}
+            style={{ width: 60, height: 60, borderRadius: 100 }} /> */}
+          <View><Image source={(userProfile && userProfile.user) ? (userProfile.user.hasOwnProperty('firstName') ? { uri: userProfile.user.image } : defaultPersonPhoto) : defaultPersonPhoto}
+            style={{ width: 60, height: 60, borderRadius: 100 }} /></View>
+          <View style={{ marginTop: hp('1%'), marginLeft: wp('2%') }}>
+            <Text style={{ fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>{
+              (userProfile && userProfile.user) ? userProfile.user.hasOwnProperty('firstName') ? `${userProfile.user.firstName} ${userProfile.user.lastName}` :
+                (facebookToken) ? jwtDecode(facebookToken).username :
+                  (signupToken) ? jwtDecode(signupToken).username :
+                    (loginToken) ? jwtDecode(loginToken).username :
+                      <TouchableWithoutFeedback underlayColor='white' onPress={() => Actions.LogUserIn()}><Text>Please Login</Text></TouchableWithoutFeedback> : ''
             }</Text>
-            <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'white'}}>
-              <Image style={{ height: 15, width: 15 }} source={logo} /> 
-              <Text style={{fontWeight: 'bold', color: 'violet'}}>
-              {
-                (facebookToken) ? jwtDecode(facebookToken).role :
-                (signupToken) ? jwtDecode(signupToken).role :
-                  (loginToken) ? jwtDecode(loginToken).role :  'Please Login'
-              }
+            <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'white' }}>
+              <Image style={{ height: 15, width: 15 }} source={logo} />
+              <Text style={{ fontWeight: 'bold', color: 'violet' }}>
+                {
+                  (facebookToken) ? jwtDecode(facebookToken).role :
+                    (signupToken) ? jwtDecode(signupToken).role :
+                      (loginToken) ? jwtDecode(loginToken).role : <TouchableWithoutFeedback underlayColor='white' onPress={() => Actions.LogUserIn()}><Text>Please Login</Text></TouchableWithoutFeedback>
+                }
               </Text>
             </View>
           </View>
         </View>
 
         {/* Edit Profile */}
-        <View style={{ flex: 0.3 }}>
-          <TouchableWithoutFeedback  underlayColor='blue'  onPress={() => Actions.UserProfile()}>
-            <Text style={{ fontWeight: 'bold',
-            color: 'violet',
-            width: wp('23%'),
-            marginLeft: wp('2%'),
-            padding: hp('0.5%'),
-            borderTopWidth: 1,
-            borderLeftWidth: 1,
-            borderRightWidth: 1,
-            borderBottomWidth: 1,
-            borderBottomLeftRadius: 2,
-            borderBottomRightRadius: 2,
-            borderTopRightRadius: 2,
-            borderTopLeftRadius: 2,
-            borderColor: 'violet'
+        <View style={{ flex: 0.1, marginTop: hp('1%') }}>
+          <TouchableWithoutFeedback underlayColor='blue' onPress={() => Actions.UserProfile()}>
+            <Text style={{
+              fontWeight: 'bold',
+              color: 'violet',
+              width: wp('25%'),
+              marginLeft: wp('2%'),
+              textAlign: 'center',
+              padding: hp('0.5%'),
+              borderTopWidth: 1,
+              borderLeftWidth: 1,
+              borderRightWidth: 1,
+              borderBottomWidth: 1,
+              borderBottomLeftRadius: 2,
+              borderBottomRightRadius: 2,
+              borderTopRightRadius: 2,
+              borderTopLeftRadius: 2,
+              borderColor: 'violet'
             }}>
               Edit Profile
             </Text>
@@ -208,60 +238,69 @@ class Home extends React.Component {
         </View>
 
         {/* Body */}
-        <View style={{flex: 5, justifyContent: 'space-around'}}>
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={homepageLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>My Homepage</Text>
-                </View>
+        <View style={{ flex: 5, justifyContent: 'space-around' }}>
+          <TouchableHighlight onPress={() => Actions.UserHomePage()}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={homepageLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>My Homepage</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={promotionLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>Promotions</Text>
-                </View>
+          <TouchableHighlight onPress={() => console.log('editing profile')}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={promotionLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Promotions</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={settingLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>Settings</Text>
-                </View>
+          <TouchableHighlight onPress={() => console.log('editing profile')}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={settingLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Settings</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={notificationLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>Notifications</Text>
-                </View>
+          <TouchableHighlight onPress={() => console.log('editing profile')}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={notificationLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Notifications</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={messageLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>Messages</Text>
-                </View>
+          <TouchableHighlight onPress={() => console.log('editing profile')}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={messageLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Messages</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
 
-            <TouchableHighlight onPress={() => console.log('editing profile')}>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
-                <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={bookmarkLogo} /> 
-                <View>
-                  <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet'}}>Bookmarks</Text>
-                </View>
+          <TouchableHighlight onPress={() => console.log('editing profile')}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={bookmarkLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Bookmarks</Text>
               </View>
-            </TouchableHighlight>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => this.logOut()}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <Image style={{ marginLeft: wp('2%'), height: 25, width: 25 }} source={logoutLogo} />
+              <View>
+                <Text style={{ marginLeft: wp('3%'), fontSize: hp('2.5%'), fontWeight: 'bold', color: 'violet' }}>Log Out</Text>
+              </View>
+            </View>
+          </TouchableHighlight>
         </View>
 
         {/* Footer */}
@@ -294,14 +333,14 @@ class Home extends React.Component {
         renderNavigationView={() => drawerView}
         ref={'DRAWER_REF'}
       >
-        <View style={{ flex: 1, height: '100%', backgroundColor: '#7d7d7d'}}>
+        <View style={{ flex: 1, height: '100%', backgroundColor: '#7d7d7d' }}>
           {/* Header */}
-          <View style={{ paddingTop: hp('2%'), flex: 0.8, flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#002233' }}>
+          <View style={{ paddingTop: hp('2%'), flex: 0.8, flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#323539' }}>
             <TouchableWithoutFeedback onPress={() => this.openSideDrawer()}>
               <Text style={{
-              color: 'white',
-              marginLeft: wp('2%'),
-              fontSize: 30
+                color: 'white',
+                marginLeft: wp('2%'),
+                fontSize: 30
               }}>
                 &#9776;
               </Text>
@@ -309,46 +348,76 @@ class Home extends React.Component {
             <Image style={{ marginTop: hp('1%') }} source={logoFull} />
             <Image style={{ height: 25, width: 21, marginTop: hp('1%') }} source={cartLogo} />
           </View>
-          
+
           {/* Body */}
           <View style={{ flex: 6, backgroundColor: '#4d4f50' }}>
             {loginStatus === 'START_LOADING' ? <View style={{ marginTop: hp('30%') }}><ActivityIndicator size={70} animating={true} color={'white'} /></View> :
-            facebookStatus === 'FACEBOOK_START_LOADING' ? <View style={{ marginTop: hp('30%') }}><ActivityIndicator size={70} animating={true} color={'white'} /></View> :
-            signUpStatus === 'START_LOADING' ? <View style={{ marginTop: hp('30%') }}><ActivityIndicator size={70} animating={true} color={'white'} /></View> :
-              <View>
-                <Text style={{ color: 'white', fontSize: 10 }}>{facebookToken && `Hello Welcome to the home feed ${jwtDecode(facebookToken).username} Work in progress ...`}</Text>
-                <Text style={{ color: 'white', fontSize: 10 }}>{signupToken && `Hello Welcome to the home feed ${jwtDecode(signupToken).username} Work in progress ...`}</Text>
-                <Text style={{ color: 'white', fontSize: 10 }}>{loginToken && `Hello Welcome to the home feed ${jwtDecode(loginToken).username} Work in progress ...`}</Text>
-              </View>
+              facebookStatus === 'FACEBOOK_START_LOADING' ? <View style={{ marginTop: hp('30%') }}><ActivityIndicator size={70} animating={true} color={'white'} /></View> :
+                signUpStatus === 'START_LOADING' ? <View style={{ marginTop: hp('30%') }}><ActivityIndicator size={70} animating={true} color={'white'} /></View> :
+                  <View style={{ flex: 1 }}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      <HomeFeedCard
+                        productPhoto={nikeLogo}
+                        title={'Nike Air Max'}
+                        owner={'Patrick'}
+                        ownerPhoto={personLogo}
+                        views={2200000}
+                        likes={1276444}
+                        price={250000000}
+                        onAddToCart={this.addToCart}
+                        viewProductDetails={this.viewProductDetails}
+                      />
+                      <HomeFeedCard
+                        productPhoto={nikeLogo2}
+                        title={'Nike Air Max'}
+                        owner={'Patrick'}
+                        ownerPhoto={personLogo}
+                        views={2200000}
+                        likes={1276444}
+                        price={250000000}
+                        onAddToCart={this.addToCart}
+                        viewProductDetails={this.viewProductDetails}
+                      />
+                      <HomeFeedCard
+                        productPhoto={nikeLogo}
+                        title={'Nike Air Max'}
+                        owner={'Patrick'}
+                        ownerPhoto={personLogo}
+                        views={2200000}
+                        likes={1276444}
+                        price={250000000}
+                        onAddToCart={this.addToCart}
+                        viewProductDetails={this.viewProductDetails}
+                      />
+                      <HomeFeedCard
+                        productPhoto={nikeLogo2}
+                        title={'Nike Air Max'}
+                        owner={'Patrick'}
+                        ownerPhoto={personLogo}
+                        views={2200000}
+                        likes={1276444}
+                        price={250000000}
+                        onAddToCart={this.addToCart}
+                        viewProductDetails={this.viewProductDetails}
+                      />
+                      <HomeFeedCard
+                        productPhoto={nikeLogo}
+                        title={'Nike Air Max'}
+                        owner={'Patrick'}
+                        ownerPhoto={personLogo}
+                        views={2200000}
+                        likes={1276444}
+                        price={250000000}
+                        onAddToCart={this.addToCart}
+                        viewProductDetails={this.viewProductDetails}
+                      />
+                    </ScrollView>
+                  </View>
             }
           </View>
 
           {/* Footer */}
-          <View
-            style={{
-              flex: 0.5,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              backgroundColor: '#002233',
-              paddingTop: hp('2%')
-            }}
-          >
-            <TouchableWithoutFeedback onPress={() => console.log('home')}>
-              <Image style={{ height: 25, width: 21 }} source={homeLogo} /> 
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('search')}>
-              <Image style={{ height: 25, width: 25 }} source={searchLogo} /> 
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('add products')}>
-              <Image style={{ height: 25, width: 21 }} source={productLogo} /> 
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('activities')}>
-              <Image style={{ height: 25, width: 27 }} source={activitiesLogo} /> 
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('editing profile')}>
-              <Image style={{ height: 25, width: 21 }} source={profileLogo} /> 
-            </TouchableWithoutFeedback>
-          </View>
+          <Footer />
         </View>
       </DrawerLayout>
     );
